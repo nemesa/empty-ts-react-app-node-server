@@ -3,9 +3,17 @@
 
 <head>
     <title>empty-ts-react-app-node-server</title>
+    <script type="text/javascript" src="bundle.js"></script>
+    <script type="text/javascript">
+        let OnBodyLoadedCallback = function () {            
+            let app = new MyApp();
+            app.onLoaded();
+        }
+    </script>
+
 </head>
 
-<body>
+<body onload="OnBodyLoadedCallback()">
     <h1>empty-ts-react-app-node-server</h1>
 </body>
 

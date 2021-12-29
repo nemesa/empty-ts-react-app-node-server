@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as fs from 'fs';
 import * as bodyParser from 'body-parser'
 import { Logger } from './logger'
 const appIndexHtml = require('../app/index.html')
@@ -18,3 +19,11 @@ expressServerApp.get('/', async (_req, res) => {
     res.set('Content-Type', 'text/html')
     res.send(appIndexHtml.default)
 })
+
+expressServerApp.get('/bundle.js', async (_req, res) => {
+    logger.Info(`GET: /bundle.js`)
+    res.set('Content-Type', 'text/javascript');
+    let clientApp = fs.readFileSync(`${__dirname}/empty-ts-react-app-node-server.app.js`);
+    res.send(clientApp);
+})
+

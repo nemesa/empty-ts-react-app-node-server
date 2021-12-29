@@ -45,12 +45,76 @@ const serverConfigFactory = (env) => {
             rules: [
                 // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
                 { test: /\.tsx?$/, loader: "ts-loader" },
-                { test: /\.html$/, loader: "html-loader" }
+                {
+                    test: /\.html$/,
+                    loader: "html-loader",
+                    options: {
+                        sources: {
+                            urlFilter: (attribute, value, resourcePath) => {
+                                //remove bundle.js from sources as GET /bundle.js will be resolved runtime by express
+                                if (/bundle\.js$/.test(value)) {
+                                    return false;
+                                }
+                                return true;
+                            }
+                        }
+                    }
+                }
             ]
         }
     }
 
     return config
+}
+
+const clientSideWebAppConfigFactory = (env) => {
+    let folder = getFolder(env)
+
+    let config = {
+        target: 'web',
+        mode: getMode(env),
+        devtool: "inline-source-map",
+        entry: "./src/app/scripts/index.ts",
+        output: {
+            path: path.join(__dirname, `/dist/${folder}`),
+            filename: `empty-ts-react-app-node-server.app.js`
+        },
+        resolve: {
+            // Add `.ts` and `.tsx` as a resolvable extension.
+            extensions: [".css", ".scss", ".html", ".ts", ".tsx", ".js"]
+        },
+        module: {
+            rules: [
+                // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
+                { test: /\.tsx?$/, loader: "ts-loader" },
+                { test: /\.html$/, loader: "html-loader" },
+                {
+                    test: /\.(s[ac]ss|css)$/i,
+                    use: [
+                        // Creates `style` nodes from JS strings
+                        "style-loader",
+                        // Translates CSS into CommonJS
+                        "css-loader",
+                        // Compiles Sass to CSS
+                        "sass-loader",
+                    ],
+                },
+                {
+                    test: /\.(svg|eot|woff|woff2|ttf)$/,
+                    use: ['file-loader']
+                },
+                {
+                    test: /\.(png|jpe?g|gif)$/i,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                        },
+                    ],
+                },
+            ]
+        }
+    };
+    return config;
 }
 
 const webpackConfig = (env) => {
@@ -61,7 +125,7 @@ const webpackConfig = (env) => {
     console.log("*".repeat(20))
 
 
-    return serverConfigFactory(env);
+    return [clientSideWebAppConfigFactory(env), serverConfigFactory(env)]    
 }
 
 module.exports = webpackConfig
