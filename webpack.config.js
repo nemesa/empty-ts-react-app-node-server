@@ -1,5 +1,5 @@
 const path = require('path')
-
+const CopyPlugin = require("copy-webpack-plugin");
 
 const getMode = (env) => {
     if (env.development) {
@@ -51,8 +51,8 @@ const serverConfigFactory = (env) => {
                     options: {
                         sources: {
                             urlFilter: (attribute, value, resourcePath) => {
-                                //remove bundle.js from sources as GET /bundle.js will be resolved runtime by express
-                                if (/bundle\.js$/.test(value)) {
+                                //remove app-bundle.js from sources as GET /bundle.js will be resolved runtime by express
+                                if (/app\-bundle\.js$/.test(value)) {
                                     return false;
                                 }
                                 return true;
@@ -61,7 +61,14 @@ const serverConfigFactory = (env) => {
                     }
                 }
             ]
-        }
+        },
+        plugins: [
+          new CopyPlugin({
+            patterns: [
+              { from: `./src/app/public`, to: path.join(__dirname, `/dist/${folder}/public`) }
+            ],
+          }),
+        ]
     }
 
     return config
@@ -74,7 +81,7 @@ const clientSideWebAppConfigFactory = (env) => {
         target: 'web',
         mode: getMode(env),
         devtool: "inline-source-map",
-        entry: "./src/app/scripts/index.ts",
+        entry: "./src/app/scripts/index.tsx",
         output: {
             path: path.join(__dirname, `/dist/${folder}`),
             filename: `empty-ts-react-app-node-server.app.js`
