@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+      "sourceMap": true
+    },
+    "include": [
+      "./src/**/*.ts",
+      "./ScriptTypings/**/*.ts"
+    ],
+    "exclude": [
+      "node_modules",
+      "dist"
+    ]
+  }
+/*{
+    "compilerOptions": {
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "module": "commonjs",
+        "target": "es6",
+        "lib": [
+            "esnext",
+            "dom",
+            "dom.iterable"
+        ],
+        "removeComments": true,
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react",
+        "resolveJsonModule": true,
+        "moduleResolution": "node",
+    },
+    "include": [
+        "./src",
+        "./webpack.config.ts"
+    ]
+}
+*/
