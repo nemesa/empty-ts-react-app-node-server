@@ -1,6 +1,7 @@
 import { Logger } from '../logger'
 import express from 'express'
 import * as fs from 'fs';
+/* eslint  @typescript-eslint/no-var-requires: "off" */
 const appIndexHtml = require('../../app/index.html')
 
 
@@ -17,7 +18,7 @@ export default function (logger: Logger, expressServerApp: express.Express) {
     expressServerApp.get('/app-bundle.js', async (_req, res) => {
         logger.Info(`GET: /app-bundle.js`)
         res.set('Content-Type', 'text/javascript');
-        let clientApp = fs.readFileSync(`${__dirname}/empty-ts-react-app-node-server.app.js`);
+        const clientApp = fs.readFileSync(`${__dirname}/empty-ts-react-app-node-server.app.js`);
         res.send(clientApp);
     })
 }

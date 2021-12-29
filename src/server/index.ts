@@ -4,7 +4,7 @@ import { Logger } from './logger'
 
 const logger = new Logger()
 const port = process.env.PORT || 11111
-let expressServerApp = express()
+const expressServerApp = express()
 expressServerApp.listen(port)
 logger.Info(`server started at port:${port}`)
 logger.Info(`http://localhost:${port}`)
