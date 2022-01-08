@@ -13,4 +13,4 @@ expressServerApp.use(bodyParser.urlencoded({ extended: true }))
 expressServerApp.use(bodyParser.json())
 
 import registerContentRoutes from './routes/content'
-registerContentRoutes(logger, expressServerApp)
+registerContentRoutes(expressServerApp)

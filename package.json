@@ -5,7 +5,7 @@
     "dev:start": "nodemon ./dist/dev/empty-ts-react-app-node-server.server.js",
     "build": "npm run lint && npm run build:prod",
     "build:dev": "npm run lint && webpack --mode=development --env development --progress",
-    "build:prod": "webpack --mode=production --env production --progress",
+    "build:prod": "webpack --mode=production --env production",
     "lint": "npm run lint:src",
     "lint:src": "eslint ./src/**/*.{ts,tsx}",
     "lint:test": "eslint ./tests/**/*.{ts,tsx}",

@@ -45,29 +45,15 @@ const serverConfigFactory = (env) => {
             rules: [
                 // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
                 { test: /\.tsx?$/, loader: "ts-loader" },
-                {
-                    test: /\.html$/,
-                    loader: "html-loader",
-                    options: {
-                        sources: {
-                            urlFilter: (attribute, value, resourcePath) => {
-                                //remove app-bundle.js from sources as GET /bundle.js will be resolved runtime by express
-                                if (/app\-bundle\.js$/.test(value)) {
-                                    return false;
-                                }
-                                return true;
-                            }
-                        }
-                    }
-                }
+                { test: /\.html$/, loader: "html-loader" }
             ]
         },
         plugins: [
-          new CopyPlugin({
-            patterns: [
-              { from: `./src/app/public`, to: path.join(__dirname, `/dist/${folder}/public`) }
-            ],
-          }),
+            new CopyPlugin({
+                patterns: [
+                    { from: `./src/app/public`, to: path.join(__dirname, `/dist/${folder}/public`) }
+                ],
+            }),
         ]
     }
 
@@ -83,7 +69,7 @@ const clientSideWebAppConfigFactory = (env) => {
         devtool: "inline-source-map",
         entry: "./src/app/scripts/index.tsx",
         output: {
-            path: path.join(__dirname, `/dist/${folder}`),
+            path: path.join(__dirname, `/dist/${folder}/public`),
             filename: `empty-ts-react-app-node-server.app.js`
         },
         resolve: {
@@ -127,12 +113,11 @@ const clientSideWebAppConfigFactory = (env) => {
 const webpackConfig = (env) => {
 
     console.log("*".repeat(20))
-    //console.log(env)
     console.log(`Build:${getMode(env)}`)
     console.log("*".repeat(20))
 
 
-    return [clientSideWebAppConfigFactory(env), serverConfigFactory(env)]    
+    return [clientSideWebAppConfigFactory(env), serverConfigFactory(env)]
 }
 
 module.exports = webpackConfig
